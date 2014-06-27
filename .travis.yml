@@ -1,0 +1,11 @@
+language: python
+python:
+  - "2.7"
+before_install:
+ -  sudo apt-get install beanstalkd
+install:
+  - pip install -r requirements-dev.txt --use-mirrors
+script:
+  - make tests
+after_script:
+  - coveralls
