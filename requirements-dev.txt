@@ -1,0 +1,4 @@
+-r requirements.txt
+https://github.com/quatix/fabix/tarball/master
+fabric
+cuisine
