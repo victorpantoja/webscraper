@@ -1,3 +1,5 @@
+[![Travis CI](https://travis-ci.org/victorpantoja/webscraper.svg?branch=master)](victorpantoja/webscraper)
+
 webscraper
 ==========
 
