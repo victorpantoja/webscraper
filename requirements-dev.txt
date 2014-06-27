@@ -2,3 +2,5 @@
 https://github.com/quatix/fabix/tarball/master
 fabric
 cuisine
+nose==1.1.2
+coverage==3.5.1

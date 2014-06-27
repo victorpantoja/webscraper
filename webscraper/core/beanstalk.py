@@ -1,7 +1,8 @@
 # coding: utf-8
-import time
 import logging
+import time
 import beanstalkc
+import pybreaker
 from webscraper.core.daemon import Daemon
 
 
@@ -43,6 +44,10 @@ class WebScraperBeanstalk(Daemon):
                 job = self.beanstalkServer.reserve()
 
                 logging.debug("job: %s" % job.body)
+
+
+                # facebook_breaker = pybreaker.CircuitBreaker(fail_max=1, reset_timeout=60)
+                # response = facebook_breaker.call(facebook_breaker.get, ismobile_server, params={"url": url}, timeout=5)
 
                 job.delete()
             except beanstalkc.SocketError, se:

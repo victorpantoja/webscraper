@@ -15,10 +15,11 @@ setup:
 start:
 	PYTHONPATH=`pwd`:`pwd`/webscraper python webscraper/server.py ${PORT}
 
-test: clean
-	echo "Running tests..."
-	PYTHONPATH=`pwd` \
-		nosetests -s --verbose --with-coverage --cover-package=webscraper tests/*
+tests: clean
+	@echo "Running tests..."
+	@export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/webscraper  &&  \
+		cd webscraper && \
+	    nosetests -s --verbose --with-coverage --cover-package=webscraper tests/handler/*
 
 start-beanstalkd:
 	@echo "Starting beanstalkd..."
