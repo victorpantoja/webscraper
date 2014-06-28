@@ -1,6 +1,5 @@
 # coding: utf-8
 from tornado.web import URLSpec
-
 from webscraper.handlers.page import PageHandler
 from webscraper.handlers.profile import ProfileHandler
 

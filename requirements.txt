@@ -1,4 +1,5 @@
 boto==2.6.0
 tornado==2.4
 beanstalkc==0.4.0
+simplejson
 webscraper-core

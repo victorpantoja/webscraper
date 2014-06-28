@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 import simplejson
 from tornado.web import RequestHandler
 from tornado.web import HTTPError
@@ -20,14 +21,19 @@ class ProfileHandler(RequestHandler):
             self.set_status(400)
             self.finish('{}')
 
-        profile_fb = Profile().find_one({'username': fb_username})
-        profile_tw = Profile().find_one({'username': fb_username})
+        try:
+            profile_fb = Profile().find_one({'username': fb_username})
+            profile_tw = Profile().find_one({'username': tw_username})
 
-        #user exists in database
-        if not profile_fb:
-            ProfileQueue().add(data=simplejson.dumps({'username': fb_username}))
-            self.set_status(202)
-            self.finish(simplejson.dumps({"msg": "processing request"}))
-        else:
-            profile = Profile.create(profile_fb)
-            self.finish(simplejson.dumps(profile.as_dict(), default=date_handler))
+            #user exists in database
+            if not profile_fb:
+                ProfileQueue().add(data=simplejson.dumps({'username': fb_username}))
+                self.set_status(202)
+                self.finish(simplejson.dumps({"msg": "processing request"}))
+            else:
+                profile = Profile.create(profile_fb)
+                self.finish(simplejson.dumps(profile.as_dict(), default=date_handler))
+        except Exception:
+            logging.exception("Could not process request")
+            self.set_status(500)
+            self.finish({"msg": "internal server error"})
