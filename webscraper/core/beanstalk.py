@@ -2,11 +2,13 @@
 import logging
 import time
 import beanstalkc
+import simplejson
 import pybreaker
+import requests
 from datetime import datetime
 from bson.objectid import ObjectId
 from webscraper.core.daemon import Daemon
-from webscraper.models.profile import Profile
+from webscraper.models.profile import Profile, Facebook
 
 
 class WebScraperBeanstalk(Daemon):
@@ -45,17 +47,12 @@ class WebScraperBeanstalk(Daemon):
 
                 logging.debug("job: %s" % job.body)
 
-                profile = Profile()
-                profile._id = ObjectId()
-                profile.name = "Victor Pantoja"
-                profile.username = "victor.pantoja.77"
-                profile.short_description = "A web developer at globo.com"
-                profile.image = "user profile image"
-                profile.popularity = 10
-                profile.updated = datetime.now()
-                profile.save()
-                # facebook_breaker = pybreaker.CircuitBreaker(fail_max=1, reset_timeout=60)
-                # response = facebook_breaker.call(facebook_breaker.get, ismobile_server, params={"url": url}, timeout=5)
+                facebook_breaker = pybreaker.CircuitBreaker(fail_max=1, reset_timeout=60)
+                response = facebook_breaker.call(requests.get,
+                                                 Facebook().get_url_profile(**simplejson.loads(job.body)),
+                                                 timeout=5)
+
+                Facebook().as_profile_dict(**simplejson.loads(response.content)).save()
 
                 job.delete()
             except beanstalkc.SocketError, se:

@@ -23,9 +23,6 @@ class Repository(object):
             
             if isinstance(attr, dict):
                 items[attrname] = attr
-                
-            if attrname == '_id':
-                items[attrname] = attr
 
         return items
     

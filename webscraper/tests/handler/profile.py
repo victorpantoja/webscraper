@@ -1,4 +1,5 @@
 # coding: utf-8
+import time
 import tornado
 import simplejson
 from tornado.httpclient import HTTPRequest
@@ -36,6 +37,10 @@ class ProfileHandlerTest(AsyncHTTPTestCase):
         content = simplejson.loads(response.body)
         #first time that user profile is required
         self.assertEqual(content['msg'], 'processing request')
+
+        #wating for FB
+        #TODO - mock Facebook call
+        time.sleep(5)
 
         #second time that user profile is required
         self.http_client.fetch(request, self.stop)

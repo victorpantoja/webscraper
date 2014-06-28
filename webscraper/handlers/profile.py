@@ -5,6 +5,8 @@ from tornado.web import HTTPError
 from webscraper.models.profile import Profile
 from webscraper.utils.profile import ProfileQueue
 
+def date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 class ProfileHandler(RequestHandler):
 
@@ -15,17 +17,13 @@ class ProfileHandler(RequestHandler):
             self.set_status(400)
             self.finish('{}')
 
-        profile = Profile().find_one({'username': username})
+        profile_db = Profile().find_one({'username': username})
 
         #user exists in database
-        if not profile:
+        if not profile_db:
             ProfileQueue().add(data=simplejson.dumps({'username': username}))
+            self.set_status(202)
             self.finish(simplejson.dumps({"msg": "processing request"}))
         else:
-            profile_dict = {'name': 'Victor Pantoja',
-                            'short_description': 'A web developer at globo.com', #if available!
-                            'image': "should-be-image",
-                            'popularity': 10,
-                            'username': 'victor.pantoja.77'}
-
-            self.finish(simplejson.dumps(profile_dict))
+            profile = Profile.create(profile_db)
+            self.finish(simplejson.dumps(profile.as_dict(), default=date_handler))
