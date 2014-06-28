@@ -34,6 +34,10 @@ Deploying
 ----------
 
 WebScraper uses Amazon EC2. So, before deploying, make sure you have your AWS credentials and nginx.conf properly configured.
-If so, just type:
 
-$ make deploy-prod
+If so, you can configure environment:
+$ fab -i <your-.pem-file> prod setup
+
+and deploy your code:
+$ fab -i <your-.pem-file> prod deploy
+

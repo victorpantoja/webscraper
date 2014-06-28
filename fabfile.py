@@ -38,6 +38,10 @@ def setup():
 
     sudo('mkdir -p {}'.format(PROJECT_DIR))
     sudo('mkdir -p /var/log/webscraper')
+    sudo('mkdir -p /opt/logs/webscrapper')
+
+    #TODO - fix me!
+    sudo('chmod -R 777 /opt')
 
     sudo('pip install virtualenv')
     sudo('virtualenv {}virtualenv'.format(PROJECT_DIR))
@@ -49,6 +53,7 @@ def setup():
         '/etc/nginx/sites-enabled/webscraper.conf', use_sudo=True)
     sudo('rm -f /etc/nginx/sites-enabled/default')
     execute(nginx, 'restart')
+    execute(beanstalkd, 'restart')
 
 
 def install_requirements():
@@ -121,3 +126,8 @@ def restart():
 def nginx(op):
     """Manage nginx service"""
     sudo('service nginx {}'.format(op))
+
+@task
+def beanstalkd(op):
+    """Manage beanstalkd service"""
+    sudo('service beanstalkd {}'.format(op))
