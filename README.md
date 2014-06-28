@@ -11,6 +11,7 @@ DEPENDENCIES
 After instaling, please make sure you have the following dependencies:
 - Python 2.7+
 - beanstalkd: http://kr.github.io/beanstalkd/download.html
+- mongodb
 
 
 INSTALING
@@ -26,4 +27,13 @@ $ make start
 
 TESTING
 ----------
-$ make test
+$ make tests
+
+
+Deploying
+----------
+
+WebScraper uses Amazon EC2. So, before deploying, make sure you have your AWS credentials and nginx.conf properly configured.
+If so, just type:
+
+$ make deploy-prod

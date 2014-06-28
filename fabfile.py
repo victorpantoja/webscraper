@@ -27,9 +27,12 @@ def prod():
 @task
 def setup():
     """Setup project"""
-    packages = 'nginx python python-pip'
+    packages = 'nginx python python-pip beanstalkd mongodb-org'
 
     with prefix('DEBIAN_FRONTEND=noninteractive'):
+        sudo('apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10')
+        sudo('rm -f /etc/apt/sources.list.d/mongodb.list')
+        sudo("echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list")
         sudo('apt-get update')
         sudo('apt-get -y install {}'.format(packages))
 
@@ -83,6 +86,7 @@ def deploy():
     """Deploy project to server"""
     local("find . -name '*.pyc' -print0|xargs -0 rm -rf", capture=False)
     local("find . -name '.sass-cache' -print0|xargs -0 rm -rf", capture=False)
+    install_requirements()
     sudo('rm -rf {}webscraper'.format(PROJECT_DIR))
     put(os.path.join(LOCAL_DIR, 'webscraper'), PROJECT_DIR, use_sudo=True)
 
