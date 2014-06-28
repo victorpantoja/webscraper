@@ -48,7 +48,7 @@ class Repository(object):
         self.get_collection().insert(self.as_dict(), safe=True)
 
     def remove(self, filter):
-        self.get_collection().remove(filter, safe=True, callback=onresponse)
+        self.get_collection().remove(filter, safe=True)
         
     def remove_all(self):
         return self.get_collection().remove()

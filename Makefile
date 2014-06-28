@@ -15,7 +15,7 @@ setup:
 start:
 	PYTHONPATH=`pwd`:`pwd`/webscraper python webscraper/server.py ${PORT}
 
-tests: clean
+tests: clean stop-beanstalkd stop-beanstalk-consumer start-beanstalkd start-beanstalk-consumer
 	@echo "Running tests..."
 	@export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/webscraper  &&  \
 		cd webscraper && \
@@ -23,9 +23,16 @@ tests: clean
 
 start-beanstalkd:
 	@echo "Starting beanstalkd..."
-	@beanstalkd -l 0.0.0.0 -p 11300
+	@beanstalkd -l 0.0.0.0 -p 11300  > /dev/null 2>&1 &
 
 stop-beanstalkd:
 	@echo "Stopping beanstalkd..."
-#   -ps -ef | egrep 'beanstalkd -d' | egrep -v egrep | tr -s ' ' | cut -f 3 -d ' ' | xargs kill
 	@killall beanstalkd 2> /dev/null; true
+
+start-beanstalk-consumer:
+	@echo "Starting beanstalk-consumer..."
+	@python beanstalk_consumer.py start
+
+stop-beanstalk-consumer:
+	@echo "Stopping beanstalk-consumer..."
+	@python beanstalk_consumer.py stop

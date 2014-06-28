@@ -1,7 +1,5 @@
 # coding: utf-8
 import simplejson
-from datetime import datetime
-from bson.objectid import ObjectId
 from tornado.web import RequestHandler
 from tornado.web import HTTPError
 from webscraper.models.profile import Profile
@@ -17,23 +15,17 @@ class ProfileHandler(RequestHandler):
             self.set_status(400)
             self.finish('{}')
 
+        profile = Profile().find_one({'username': username})
+
         #user exists in database
-        if False:
-            ProfileQueue().add()
+        if not profile:
+            ProfileQueue().add(data=simplejson.dumps({'username': username}))
             self.finish(simplejson.dumps({"msg": "processing request"}))
+        else:
+            profile_dict = {'name': 'Victor Pantoja',
+                            'short_description': 'A web developer at globo.com', #if available!
+                            'image': "should-be-image",
+                            'popularity': 10,
+                            'username': 'victor.pantoja.77'}
 
-        profile = Profile()
-        profile._id = ObjectId()
-        profile.name = "Victor Pantoja"
-        profile.short_description = "A web developer at globo.com"
-        profile.image = "user profile image"
-        profile.popularity = 10
-        profile.updated = datetime.now()
-        profile.save()
-
-        profile_dict = {'name': 'Victor Pantoja',
-                        'short_description': 'A web developer at globo.com', #if available!
-                        'image': "should-be-image",
-                        'popularity': 10}
-
-        self.finish(simplejson.dumps(profile_dict))
+            self.finish(simplejson.dumps(profile_dict))

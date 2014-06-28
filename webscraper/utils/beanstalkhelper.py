@@ -8,59 +8,7 @@ from webscraper.utils import Singleton
 
 
 class BeanstalkHelper(Singleton):
-
-    beanstalk_pool = None
-    beanstalk_pool_failed = []
     beanstalk_local = None
-
-    def addHostFailed(self, host):
-        for host_failed in self.beanstalk_pool_failed:
-            if host_failed == host:
-                return
-         
-        self.beanstalk_pool_failed.append(host)
-        
-    def addHost(self, host):
-        for h in self.beanstalk_pool:
-            if h == host:
-                return
-         
-        self.beanstalk_pool.append(host)
-    
-    def getPool(self):
-        
-        if not self.beanstalk_pool and self.beanstalk_pool != []:
-            self.beanstalk_pool  = []
-            for host in settings.BEANSTALK_HOSTS:
-                try:
-                    self.addHost(beanstalkc.Connection(host=host.split(":")[0], port=int(host.split(":")[1])))
-                    logging.info("[BEANSTALK][TORNADO][%s] - conectado com sucesso " % host)
-                except beanstalkc.SocketError, se:
-                    self.addHostFailed(host)
-                    logging.error("[BEANSTALK][TORNADO][%s] - nao foi possivel conectar no momento " % host)
-                    logging.info("[BEANSTALK][TORNADO] Verificar se o beanstalkd da url %s esta UP AND RUNNING!" % host)
-        
-        # validando instancias
-        for connhost in self.beanstalk_pool:
-            try:
-                connhost.use("path")
-            except beanstalkc.SocketError, se:
-                self.beanstalk_pool.remove(connhost)
-                self.addHostFailed("%s:%s" % (connhost.host, connhost.port))
-                logging.error("[BEANSTALK][TORNADO][%s:%s] - nao foi possivel conectar no momento " % (connhost.host, connhost.port))
-                logging.info("[BEANSTALK][TORNADO] Verificar se o beanstalkd da url %s:%s esta UP AND RUNNING!" % (connhost.host, connhost.port))
-
-        # append failed
-        for host in self.beanstalk_pool_failed:
-            try:
-                self.addHost(beanstalkc.Connection(host=host.split(":")[0], port=int(host.split(":")[1])))
-                self.beanstalk_pool_failed.remove(host)
-                logging.info("[BEANSTALK][TORNADO][%s] - conectado com sucesso " % host)
-            except beanstalkc.SocketError, se:
-                logging.error("[BEANSTALK][TORNADO][%s] - nao foi possivel conectar no momento " % host)
-                logging.info("[BEANSTALK][TORNADO] Verificar se o beanstalkd da url %s esta UP AND RUNNING!" % host)
-
-        return self.beanstalk_pool
 
     def getHostLocal(self):
         if self.beanstalk_local:
@@ -68,16 +16,14 @@ class BeanstalkHelper(Singleton):
                 self.beanstalk_local.use("path")
             except beanstalkc.SocketError, se:
                 self.beanstalk_local = None
-                logging.error("[BEANSTALK][TORNADO] nao foi possivel conectar ao beanstalkd-local no momento")
-                logging.info("[BEANSTALK][TORNADO] Verificar se o beanstalkd-local esta UP AND RUNNING!")
+                logging.error("[BEANSTALK][TORNADO] could not connect to beanstalkd")
         
         if not self.beanstalk_local:
             host, port = settings.BEANSTALK.split(":")            
             try:
                 self.beanstalk_local = beanstalkc.Connection(host=host, port=int(port))
-                logging.info("[BEANSTALK][TORNADO][%s] - conectado com sucesso " % host)
+                logging.info("[BEANSTALK][TORNADO][%s] - connected! " % host)
             except beanstalkc.SocketError, se:
-                logging.error("[BEANSTALK][TORNADO][%s] - nao foi possivel conectar no momento " % host)
-                logging.info("[BEANSTALK][TORNADO] Verificar se o beanstalkd da url %s esta UP AND RUNNING!" % host)
+                logging.error("[BEANSTALK][TORNADO][%s] - could not connect to beanstalkd" % host)
         
         return self.beanstalk_local

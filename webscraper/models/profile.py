@@ -10,6 +10,7 @@ class Profile(Collection, ProfileRepository):
 
     _id = Property(ObjectId, "profile id")
     name = Property(unicode, "user name")
+    username = Property(unicode, "username")
     short_description = Property(unicode, "user name")
     image = Property(unicode, "user profile image")
     popularity = Property(int, "user popularity")
