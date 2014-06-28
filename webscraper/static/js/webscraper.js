@@ -2,10 +2,11 @@ var webscraper = {
     init: function() {
         var $feedback = $(".feedback");
         $(".scrap").submit(function(event){
-            var username = $(this).find("input[name=username]").val();
+            var fbUsername = $(this).find("input[name=facebook_username]").val();
+            var twUsername = $(this).find("input[name=twitter_username]").val();
 
             $.ajax({
-                url: "/profile?username="+ username,
+                url: "/profile?facebook_username=" + fbUsername + "&twitter_username=" + twUsername,
                 dataType: "json",
                 error: function(){
                     console.log("error");

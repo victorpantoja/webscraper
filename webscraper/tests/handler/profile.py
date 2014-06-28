@@ -20,6 +20,7 @@ class ProfileHandlerTest(AsyncHTTPTestCase):
 
     def setUp(self):
         self.username = "victor.pantoja.77"
+        self.tw_username = "victorpantoja"
         super(ProfileHandlerTest, self).setUp()
 
     def tearDown(self):
@@ -29,7 +30,9 @@ class ProfileHandlerTest(AsyncHTTPTestCase):
     def test_get_profile(self):
         '''Getting a profile'''
 
-        request = HTTPRequest(url=self.get_url('/profile?username={0}'.format(self.username)), method='GET')
+        request = HTTPRequest(url=self.get_url('/profile?facebook_username={0}&twitter_username={1}'
+                                               .format(self.username, self.tw_username)),
+                              method='GET')
 
         self.http_client.fetch(request, self.stop)
         response = self.wait()
