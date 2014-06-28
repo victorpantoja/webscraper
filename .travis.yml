@@ -10,7 +10,7 @@ install:
   - pip install -r requirements-dev.txt --use-mirrors
 script:
   - sudo mkdir -p /opt/logs/webscrapper/
-  - sudo chmod 777 /opt/logs
+  - sudo chmod -R 777 /opt
   - make tests
 after_script:
   - coveralls
