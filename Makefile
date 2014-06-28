@@ -31,8 +31,8 @@ stop-beanstalkd:
 
 start-beanstalk-consumer:
 	@echo "Starting beanstalk-consumer..."
-	@python beanstalk_consumer.py start
+	@python scraper.py start
 
 stop-beanstalk-consumer:
 	@echo "Stopping beanstalk-consumer..."
-	@python beanstalk_consumer.py stop
+	@python scraper.py stop
