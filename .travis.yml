@@ -9,7 +9,7 @@ before_install:
 install:
   - pip install -r requirements-dev.txt --use-mirrors
 script:
-  - mkdir -p /opt/logs/webscrapper/
+  - sudo mkdir -p /opt/logs/webscrapper/
   - make tests
 after_script:
   - coveralls
