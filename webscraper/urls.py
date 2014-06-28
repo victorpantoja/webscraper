@@ -6,5 +6,5 @@ from webscraper.handlers.profile import ProfileHandler
 
 urls = (
     URLSpec(r'/(?P<page>index.html)?', PageHandler, name='home'),
-    URLSpec(r'/profile', ProfileHandler, name='profile'),
+    URLSpec(r'/?(?P<version>v1.0)?/profile', ProfileHandler, name='profile'),
 )
