@@ -1,7 +1,4 @@
 boto==2.6.0
 tornado==2.4
 beanstalkc==0.4.0
-simplejson
-pybreaker==0.2.2
-pymongo==2.7.1
-requests==2.3.0
+scraper

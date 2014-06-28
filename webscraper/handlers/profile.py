@@ -2,7 +2,7 @@
 import simplejson
 from tornado.web import RequestHandler
 from tornado.web import HTTPError
-from webscraper.models.profile import Profile
+from scraper.models.profile import Profile
 from webscraper.utils.profile import ProfileQueue
 
 

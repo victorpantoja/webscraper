@@ -3,8 +3,8 @@ import logging
 import time
 import beanstalkc
 import simplejson
+from scraper.models.profile import Facebook
 from webscraper.core.daemon import Daemon
-from webscraper.models.profile import Facebook
 
 
 class WebScraperBeanstalk(Daemon):

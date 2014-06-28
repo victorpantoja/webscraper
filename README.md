@@ -3,7 +3,7 @@
 webscraper
 ==========
 
-Just an easy way to get Facebook and Twitter Profiles
+A Web Application that uses webscrap to scrap for content in web
 
 DEPENDENCIES
 ------------

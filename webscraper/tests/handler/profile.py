@@ -2,10 +2,10 @@
 import time
 import tornado
 import simplejson
+from scraper.models.profile import Profile
 from tornado.httpclient import HTTPRequest
 from tornado.testing import AsyncHTTPTestCase
 from webscraper.handlers.profile import ProfileHandler
-from webscraper.models.profile import Profile
 
 
 class ProfileHandlerTest(AsyncHTTPTestCase):

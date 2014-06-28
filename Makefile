@@ -30,9 +30,9 @@ stop-beanstalkd:
 	@killall beanstalkd 2> /dev/null; true
 
 start-beanstalk-consumer:
-	@echo "Starting beanstalk-consumer..."
-	@cd webscraper && python scraper.py start
+	@echo "Starting scrap-consumer..."
+	@cd webscraper && python scraper-consumer.py start
 
 stop-beanstalk-consumer:
-	@echo "Stopping beanstalk-consumer..."
-	@cd webscraper && python scraper.py stop
+	@echo "Stopping scrap-consumer..."
+	@cd webscraper && python scraper-consumer.py stop
