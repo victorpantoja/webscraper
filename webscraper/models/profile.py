@@ -1,11 +1,25 @@
+# coding: utf-8
+from bson.objectid import ObjectId
+from datetime import datetime
+from webscraper.repository import ProfileRepository, Property, Collection
 
-class ProfileBase(object):
+
+class Profile(Collection, ProfileRepository):
+
+    __collection__ = 'profile'
+
+    _id = Property(ObjectId, "profile id")
+    name = Property(unicode, "user name")
+    short_description = Property(unicode, "user name")
+    image = Property(unicode, "user profile image")
+    popularity = Property(int, "user popularity")
+    updated = Property(datetime, "updated time")
+
+
+
+class Facebook(Profile):
     pass
 
 
-class Facebook(ProfileBase):
-    pass
-
-
-class Twitter(ProfileBase):
+class Twitter(Profile):
     pass

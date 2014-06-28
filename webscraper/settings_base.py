@@ -14,6 +14,11 @@ BEANSTALK_BOXES = ["localhost"]
 BEANSTALK = "localhost:11300"
 BEANSTALK_HOSTS = ["%s:11300" % box for box in BEANSTALK_BOXES]
 
+database_url = "localhost"
+database_port = 27017
+database_user = "usr_newsfeed"
+database_pwd = "usr_newsfeed"
+
 logging.basicConfig(
     level = getattr(logging, "DEBUG"),
     format = '%(asctime)s %(levelname)s %(message)s',
