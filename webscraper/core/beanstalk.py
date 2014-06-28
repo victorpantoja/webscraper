@@ -4,6 +4,7 @@ import time
 import beanstalkc
 import simplejson
 from scraper.models.profile import Facebook
+from scraper.models.profile import Twitter
 from webscraper.core.daemon import Daemon
 
 
@@ -43,7 +44,12 @@ class WebScraperBeanstalk(Daemon):
 
                 logging.debug("job: %s" % job.body)
 
-                Facebook().as_profile_dict(**simplejson.loads(job.body)).save()
+                job_dict = simplejson.loads(job.body)
+
+                if job_dict["type"] == "Facebook":
+                    Facebook().as_profile_dict(**job_dict).save()
+                if job_dict["type"] == "Twitter":
+                    Twitter().as_profile_dict(**job_dict).save()
 
                 job.delete()
             except beanstalkc.SocketError, se:

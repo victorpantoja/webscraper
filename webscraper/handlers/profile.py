@@ -3,7 +3,8 @@ import logging
 import simplejson
 from tornado.web import RequestHandler
 from tornado.web import HTTPError
-from scraper.models.profile import Profile
+from scraper.models.profile import Facebook
+from scraper.models.profile import Twitter
 from webscraper.utils.profile import ProfileQueue
 
 
@@ -22,16 +23,22 @@ class ProfileHandler(RequestHandler):
             self.finish('{}')
 
         try:
-            profile_fb = Profile().find_one({'username': fb_username})
-            profile_tw = Profile().find_one({'username': tw_username})
+            profile_fb = Facebook().find_one({'username': fb_username})
+            profile_tw = Twitter().find_one({'username': tw_username})
 
             #user exists in database
-            if not profile_fb:
-                ProfileQueue().add(data=simplejson.dumps({'username': fb_username}))
+            if not profile_fb or not profile_tw:
                 self.set_status(202)
+
+                if not profile_fb:
+                    ProfileQueue().add(data=simplejson.dumps({'type': 'Facebook', 'username': fb_username}))
+
+                if not profile_tw:
+                    ProfileQueue().add(data=simplejson.dumps({'type': 'Twitter', 'username': tw_username}))
+
                 self.finish(simplejson.dumps({"msg": "processing request"}))
             else:
-                profile = Profile.create(profile_fb)
+                profile = Facebook.create(profile_fb)
                 self.finish(simplejson.dumps(profile.as_dict(), default=date_handler))
         except Exception:
             logging.exception("Could not process request")
