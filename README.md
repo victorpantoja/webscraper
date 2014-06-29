@@ -3,7 +3,9 @@
 webscraper
 ==========
 
-A Web Application that uses webscrap to scrap for content in web
+A Web Application that uses webscrap to scrap for content in web.
+
+You can see a demo here: http://mywebscraper.com. This demo runs on an Amazon EC2 instance and has been completely configured using fabric.
 
 
 ARCHITECTURE
@@ -41,20 +43,26 @@ After instaling, please make sure you have the following dependencies:
 
 INSTALING
 ---------
-$ mkvirtualenv webscraper
-$ make setup
+Is strongly recommended using virtualenv and virtualenvwrapper:
+
+  mkvirtualenv webscraper
+
+  make setup
 
 
 RUNNING
 ------------
-- start beanstalkd (queue manager)
-$ make start-beanstalkd
+- start beanstalkd (queue manager):
 
-- start scraper (consumer)
-$ make start-beanstalk-consumer
+	make start-beanstalkd
 
-- start application on port 9085
-$ make start
+- start scraper (consumer):
+
+	make start-beanstalk-consumer
+
+- start application on port 9085:
+
+	make start
 
 
 TESTING
@@ -68,10 +76,12 @@ Deploying
 WebScraper uses Amazon EC2. So, before deploying, make sure you have your AWS credentials and nginx.conf properly configured.
 
 If so, you can configure environment:
-$ fab -i <your-.pem-file> prod setup
+
+  fab -i <your-.pem-file> prod setup
 
 and deploy your code:
-$ fab -i <your-.pem-file> prod deploy
+
+  fab -i <your-.pem-file> prod deploy
 
 
 TODO
