@@ -51,8 +51,13 @@ class ProfileHandlerTest(AsyncHTTPTestCase):
         response = self.wait()
         content = simplejson.loads(response.body)
 
-        self.assertIn("name", content)
-        self.assertIn("short_description", content)
-        self.assertIn("image", content)
-        self.assertIn("popularity", content)
-        self.assertEqual(content['username'], self.username)
+        self.assertIn("facebook", content)
+        self.assertIn("twitter", content)
+
+        self.assertIn("name", content['facebook'])
+        self.assertIn("short_description", content['facebook'])
+        self.assertIn("image", content['facebook'])
+        self.assertIn("popularity", content['facebook'])
+
+        self.assertEqual(content['facebook']['username'], self.username)
+        self.assertEqual(content['twitter']['username'], self.tw_username)

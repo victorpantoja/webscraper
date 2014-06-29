@@ -2,31 +2,50 @@ var webscraper = {
     init: function() {
         var $feedback = $(".feedback");
         $(".scrap").submit(function(event){
-            var fbUsername = $(this).find("input[name=facebook_username]").val();
-            var twUsername = $(this).find("input[name=twitter_username]").val();
 
-            $.ajax({
-                url: "/profile?facebook_username=" + fbUsername + "&twitter_username=" + twUsername,
-                dataType: "json",
-                error: function(){
-                    console.log("error");
-                },
-                statusCode: {
-                    202: function(data){
-                        $feedback.html("<span>"+data.msg+"</span>");
+            //FB.login();
+
+            //if(FB.getAccessToken()){
+                var fbUsername = $(this).find("input[name=facebook_username]").val();
+                var twUsername = $(this).find("input[name=twitter_username]").val();
+                var accessToken = FB.getAccessToken();
+
+                $.ajax({
+                    url: "/profile?facebook_username=" + fbUsername + "&twitter_username=" + twUsername + "&fbAccessToken=" + accessToken,
+                    dataType: "json",
+                    error: function(){
+                        console.log("error");
                     },
-                    200: function(data){
-                        var htmlProfile = '<span>Username: '+data.username+'</span><br />' +
-                            '<span>Name: '+data.name+'</span><br />' +
-                            '<span>Short Description: '+data.short_description+'</span><br />' +
-                            '<span>Profile Image: '+data.image+'</span><br />' +
-                            '<span>Popularity: '+data.popularity+'</span><br />' +
-                            '<span>Last Updated: '+data.updated+'</span><br />';
+                    statusCode: {
+                        202: function(data){
+                            $feedback.html("<span>"+data.msg+"</span>");
+                        },
+                        200: function(data){
+                            var htmlProfile = '<h2>Facebook</h2>' +
+                                '<span>Username: '+data.facebook.username+'</span><br />' +
+                                '<span>Name: '+data.facebook.name+'</span><br />' +
+                                '<span>Short Description: '+data.facebook.short_description+'</span><br />' +
+                                '<span>Profile Image: '+data.facebook.image+'</span><br />' +
+                                '<span>Popularity: '+data.facebook.popularity+'</span><br />' +
+                                '<span>Last Updated: '+data.facebook.updated+'</span><br />';
 
-                        $feedback.html(htmlProfile);
+                            $feedback.html(htmlProfile);
+
+                            /*FIXME!!!*/
+                            var htmlProfile = '<h2>Twitter</h2>' +
+                                '<span>Username: '+data.twitter.username+'</span><br />' +
+                                '<span>Name: '+data.twitter.name+'</span><br />' +
+                                '<span>Short Description: '+data.twitter.short_description+'</span><br />' +
+                                '<span>Profile Image: '+data.twitter.image+'</span><br />' +
+                                '<span>Popularity: '+data.twitter.popularity+'</span><br />' +
+                                '<span>Last Updated: '+data.twitter.updated+'</span><br />';
+
+                            $feedback.append(htmlProfile);
+                        }
                     }
-                }
-            });
+                });
+            //}
+
 
             event.preventDefault();
         });

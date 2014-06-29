@@ -2,6 +2,9 @@
 
 {% block content %}
 <section class="container">
+    <div class="fb-login">
+      <fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
+    </div>
     <div>
         <form class="scrap" autocomplete="on">
             <label>Facebook</label>
@@ -12,6 +15,7 @@
             <input type="submit" value="Submit" class="btn-submit">
         </form>
     </div>
+      <div id="fb-root"></div>
     <div class="feedback"></div>
 </section>
 {% end %}

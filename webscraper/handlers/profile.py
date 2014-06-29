@@ -1,9 +1,9 @@
 # coding: utf-8
 import logging
-from uuid import uuid1
 import simplejson
 from bson.objectid import ObjectId
 from datetime import datetime
+from uuid import uuid1
 from tornado.web import RequestHandler
 from tornado.web import HTTPError
 from scraper.models.profile import Facebook
@@ -22,6 +22,8 @@ class ProfileHandler(RequestHandler):
     def get(self, **kw):
         try:
             fb_username = self.get_argument('facebook_username')
+            #fb_access_token = self.get_argument('fbAccessToken')
+            fb_access_token = ""
             tw_username = self.get_argument('twitter_username')
         except HTTPError, e:
             self.set_status(400)
@@ -46,7 +48,8 @@ class ProfileHandler(RequestHandler):
 
                     ProfileQueue().add(data=simplejson.dumps({'job': job.global_id,
                                                               'type': 'Facebook',
-                                                              'username': fb_username}))
+                                                              'username': fb_username,
+                                                              'acess_token': fb_access_token}))
 
                 if not profile_tw:
                     job = Job()
@@ -62,8 +65,10 @@ class ProfileHandler(RequestHandler):
 
                 self.finish(simplejson.dumps({"msg": "processing request"}))
             else:
-                profile = Facebook.create(profile_fb)
-                self.finish(simplejson.dumps(profile.as_dict(), default=date_handler))
+                fb_profile = Facebook.create(profile_fb)
+                tw_profile = Facebook.create(profile_tw)
+                self.finish(simplejson.dumps({'facebook': fb_profile.as_dict(), 'twitter': tw_profile.as_dict()},
+                                             default=date_handler))
         except Exception:
             logging.exception("Could not process request")
             self.set_status(500)
