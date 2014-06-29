@@ -8,10 +8,10 @@ var webscraper = {
             //if(FB.getAccessToken()){
                 var fbUsername = $(this).find("input[name=facebook_username]").val();
                 var twUsername = $(this).find("input[name=twitter_username]").val();
-                var accessToken = FB.getAccessToken();
+                //var accessToken = FB.getAccessToken();
 
                 $.ajax({
-                    url: "/profile?facebook_username=" + fbUsername + "&twitter_username=" + twUsername + "&fbAccessToken=" + accessToken,
+                    url: "/profile?facebook_username=" + fbUsername + "&twitter_username=" + twUsername + "&fbAccessToken=", // + accessToken,
                     dataType: "json",
                     error: function(){
                         console.log("error");
