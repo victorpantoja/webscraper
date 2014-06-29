@@ -3,7 +3,9 @@
 webscraper
 ==========
 
-A Web Application that uses webscrap to scrap for content in web
+A Web Application that uses webscrap to scrap for content in web.
+
+You can see a demo here: http://mywebscraper.com. This demo runs on an Amazon EC2 instance and has been completely configured using fabric.
 
 
 ARCHITECTURE
