@@ -59,16 +59,16 @@ def main():
     beanstalk_consumer = WebScraperBeanstalk(pidfile=pidfile, host=settings.BEANSTALK, tube=tube)
 
     #uncomment to not run as a deamon
-    beanstalk_consumer.run()
+    #beanstalk_consumer.run()
 
-    # if command[0] == "start":
-    #     beanstalk_consumer.start()
-    #
-    # elif command[0] == "stop":
-    #     beanstalk_consumer.stop()
-    #
-    # elif command[0] == "restart":
-    #     beanstalk_consumer.restart()
+    if command[0] == "start":
+        beanstalk_consumer.start()
+
+    elif command[0] == "stop":
+        beanstalk_consumer.stop()
+
+    elif command[0] == "restart":
+        beanstalk_consumer.restart()
     
 if __name__ == "__main__":
     main()
