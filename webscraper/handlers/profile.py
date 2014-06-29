@@ -1,10 +1,15 @@
 # coding: utf-8
 import logging
+from uuid import uuid1
 import simplejson
+from bson.objectid import ObjectId
+from datetime import datetime
 from tornado.web import RequestHandler
 from tornado.web import HTTPError
 from scraper.models.profile import Facebook
 from scraper.models.profile import Twitter
+from webscraper.models.job import Job
+from webscraper.models.job import STATUS_CREATED
 from webscraper.utils.profile import ProfileQueue
 
 
@@ -30,11 +35,30 @@ class ProfileHandler(RequestHandler):
             if not profile_fb or not profile_tw:
                 self.set_status(202)
 
+                #Gonna create 2 jobs to gain performance as each job can execute separetely
                 if not profile_fb:
-                    ProfileQueue().add(data=simplejson.dumps({'type': 'Facebook', 'username': fb_username}))
+                    job = Job()
+                    job._id = ObjectId()
+                    job.global_id = uuid1().get_hex()
+                    job.status = STATUS_CREATED
+                    job.started_at = datetime.now()
+                    job.save()
+
+                    ProfileQueue().add(data=simplejson.dumps({'job': job.global_id,
+                                                              'type': 'Facebook',
+                                                              'username': fb_username}))
 
                 if not profile_tw:
-                    ProfileQueue().add(data=simplejson.dumps({'type': 'Twitter', 'username': tw_username}))
+                    job = Job()
+                    job._id = ObjectId()
+                    job.global_id = uuid1().get_hex()
+                    job.status = STATUS_CREATED
+                    job.started_at = datetime.now()
+                    job.save()
+
+                    ProfileQueue().add(data=simplejson.dumps({'job': job.global_id,
+                                                              'type': 'Twitter',
+                                                              'username': tw_username}))
 
                 self.finish(simplejson.dumps({"msg": "processing request"}))
             else:

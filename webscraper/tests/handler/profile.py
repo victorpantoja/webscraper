@@ -26,6 +26,7 @@ class ProfileHandlerTest(AsyncHTTPTestCase):
     def tearDown(self):
         super(ProfileHandlerTest, self).tearDown()
         Profile().remove({'username': self.username})
+        Profile().remove({'username': self.tw_username})
 
     def test_get_profile(self):
         '''Getting a profile'''
