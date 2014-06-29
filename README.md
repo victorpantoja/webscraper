@@ -54,15 +54,15 @@ RUNNING
 ------------
 - start beanstalkd (queue manager):
 
-  make start-beanstalkd
+	make start-beanstalkd
 
 - start scraper (consumer):
 
-  make start-beanstalk-consumer
+	make start-beanstalk-consumer
 
 - start application on port 9085:
 
-  make start
+	make start
 
 
 TESTING
