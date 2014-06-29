@@ -60,10 +60,13 @@ class WebScraperBeanstalk(Daemon):
                 Job().update(id_dict=id_dict, update_dict=update_dict)
 
                 if job_dict["type"] == "Facebook":
-                    Facebook().as_profile_dict(**job_dict).save()
+                    profile = Facebook().as_profile_dict(**job_dict)
+                    profile.save()
                 if job_dict["type"] == "Twitter":
-                    Twitter().as_profile_dict(**job_dict).save()
+                    profile = Twitter().as_profile_dict(**job_dict)
+                    profile.save()
 
+                job_db['profile'] = profile._id
                 job_db['status'] = STATUS_FINISHED
                 job_db['completed_at'] = datetime.now()
                 Job().update(id_dict=id_dict, update_dict=update_dict)
